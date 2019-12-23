@@ -11,6 +11,7 @@ function App() {
       
         <h1>React page</h1>
         <Login />
+        <Register />
         
     </div>
   );
