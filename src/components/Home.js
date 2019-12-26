@@ -57,10 +57,6 @@ export default class Home extends Component {
                     <div className="form-group">
                         <h1>Password is : {this.state.password} </h1>
                     </div>    
-                          
-                        
-                        
-                        
                 </div>
                 <div className="container">
                 <Link to="/edit"><p>Edit Details</p></Link>

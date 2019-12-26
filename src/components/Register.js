@@ -124,7 +124,7 @@ export default class Register extends Component {
                     
                     <div className="form-group">
                         <label>Phone</label>
-                        <input type="tel" className="form-control" 
+                        <input type="number" className="form-control" 
                         value={this.state.phone} onChange={this.onChangePhone} />
 
                         <div style={{ fontSize: 12, color: "red" }}>

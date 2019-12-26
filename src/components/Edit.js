@@ -139,7 +139,7 @@ export default class Register extends Component {
                     
                     <div className="form-group">
                         <label>Phone</label>
-                        <input type="tel" className="form-control" 
+                        <input type="number" className="form-control" 
                         value={this.state.phone} onChange={this.onChangePhone} />
 
                         <div style={{ fontSize: 12, color: "red" }}>
@@ -170,7 +170,7 @@ export default class Register extends Component {
                         <button type="submit" className="btn btn-primary btn-lg">Submit</button>
                     </div>
                 </form>
-                <Link to="/home"><p>Back To home Page</p></Link> 
+                
                 
             </div>
         )

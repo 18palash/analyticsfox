@@ -99,7 +99,7 @@ export default class Login extends Component {
                         <Link to="/register"><p>Not a User ? Register here</p></Link> 
                     </div>
                 </form>  
-                {this.state.passwordComp}
+                
                     
             </div>
         )
