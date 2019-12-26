@@ -1,36 +1,41 @@
 import React , {Component} from 'react';
+import { Redirect , Link } from 'react-router-dom';
 
 
-
-class Login extends Component {
+export default class Login extends Component {
     constructor(props){
         super(props);
         
         this.state = {  
+            toHome: false,
             username : "",
             password : "",
-            usernameError: "",
-            passwordError: ""            
+            usernameComp: "",
+            passwordComp: ""            
         }
     }
 
+    componentDidMount() {
+        this.userData = JSON.parse(sessionStorage.getItem('user'));
+        if (sessionStorage.getItem('user')) {
+            this.setState({
+                usernameComp: this.userData.username,
+                passwordComp: this.userData.password
+            }) 
+            
+            
+        }
+    }
     validate = () => {
         let usernameError = "";
         let passwordError = "";
-        // let passwordError = "";
-    
+        
         if (!this.state.username) {
           usernameError = "name cannot be blank";
         }
-        
         if (!this.state.password) {
             passwordError = "name cannot be blank";
-          }
-          
-        if (!this.state.username.includes("@")) {
-          usernameError = "invalid email";
-        }
-    
+          }  
         if (usernameError || passwordError) {
           this.setState({ usernameError, passwordError });
           return false;
@@ -39,49 +44,62 @@ class Login extends Component {
         return true;
       };
     
-
     handlechangeall = (event) =>{
         this.setState ( { [event.target.name] :event.target.value  } )
     }
    
     handlelogin = (event) => {
-        const isValid = this.validate();
-        if (isValid) {
-            console.log(this.state);
-            alert( JSON.stringify(this.state));
-             
+        if (this.state.username == this.state.usernameComp && this.state.password == this.state.passwordComp){
+            this.setState({
+                toHome: true
+            }) 
         }
-            alert( JSON.stringify(this.state));
-        
+        else{
+            alert("enter correct login details")
+        }
             event.preventDefault();
     }
     
+
+
+
+
     render(){
+        if (this.state.toHome === true) {
+            return <Redirect to='/home' />
+        }
         return(
-            <div className="Register">
-                <h1>Register Page</h1>
+            <div className="container">
+                <h1>Login Page</h1>
                 <form onSubmit = {this.handlelogin} >          
 
-                    <label>Username</label>
-                    <input type="text" name="username"
-                     value= {this.state.username} onChange={this.handlechangeall} />
-                    <br/>
-                    <div style={{ fontSize: 12, color: "red" }}>
-                        {this.state.usernameError}
+                    <div className="form-group">
+                        <label>Username</label>
+                        <input type="text" className="form-control" name="username"
+                        value= {this.state.username} onChange={this.handlechangeall} />
+                        
+                        <div style={{ fontSize: 12, 
+                            color: "red" }}>
+                            {this.state.usernameError}
+                        </div>
                     </div>
-                    <br/>
 
-                    <label>Password</label>
-                    <input type="password" name="password" 
-                     value= {this.state.password} onChange={this.handlechangeall} />
-                    <br/>
-                    <div style={{ fontSize: 12, color: "red" }}>
-                        {this.state.passwordError}
+                    <div className="form-group">
+                        <label>Password</label>
+                        <input type="password" className="form-control" name="password" 
+                        value= {this.state.password} onChange={this.handlechangeall} />
+                        
+                        <div style={{ fontSize: 12, color: "red" }}>
+                            {this.state.passwordError}
+                        </div>
                     </div>
-                    <br/>
-                    <input type="submit" value="Login" name="submit"/>
-                </form>
-                    <p>Not a User ? Register here</p>
+                    <div className="form-group">
+                        <button type="submit"  className="btn btn-primary btn-lg" value="Login" name="Login">Login</button>
+                        <Link to="/register"><p>Not a User ? Register here</p></Link> 
+                    </div>
+                </form>  
+                {this.state.passwordComp}
+                    
             </div>
         )
 
@@ -89,4 +107,3 @@ class Login extends Component {
     
 }
 
-export default Login;

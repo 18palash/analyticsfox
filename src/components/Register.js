@@ -1,70 +1,163 @@
-import React , {Component} from 'react';
+import React, { Component } from 'react';
+import { Redirect , Link } from 'react-router-dom';
+export default class Register extends Component {
+    userData;
 
-class Register extends Component {
-    constructor(props){
+    constructor(props) {
         super(props);
-       
-        this.state = {  
-            fullname: "",
-            email: "",
-            phone : "",
-            username : "",
-            password : ""
+
+        this.onChangeName = this.onChangeName.bind(this);
+        this.onChangeEmail = this.onChangeEmail.bind(this);
+        this.onChangePhone = this.onChangePhone.bind(this);
+        this.onChangeUsername = this.onChangeUsername.bind(this);
+        this.onChangePassword = this.onChangePassword.bind(this);
+        this.onSubmit = this.onSubmit.bind(this);
+
+        this.state = {
+            name: '',
+            email: '',
+            phone: '',
+            username: '',
+            password: ''
+            
         }
     }
 
-    handlechangeall = (event) =>{
-        this.setState ( { [event.target.name] :event.target.value  } )
+    onChangeName(event) {
+        this.setState({ name: event.target.value })
     }
-   
-    handlesubmit = (event) => {
-        alert(` my name is ${this.state.fullname}. 
-                My email id is ${this.state.email}
-                My mobile number is ${this.state.phone}.
-                My password is ${this.state.password} `);
+    onChangeEmail(event) {
+        this.setState({ email: event.target.value })
+    }
+    onChangePhone(event) {
+        this.setState({ phone: event.target.value })
+    }
+    onChangeUsername(event) {
+        this.setState({ username: event.target.value })
+    }
+    onChangePassword(event) {
+        this.setState({ password: event.target.value })
+    }
+
+    validate = () => {
+        let fullnameError = "";
+        let emailError = "";
+        let phoneError = "";
+        let usernameError = "";
+        let passwordError = "";
         
-        //alert as JSON         
-        alert( JSON.stringify(this.state));
-        event.preventDefault();
+        
+        if (!this.state.name) {
+                fullnameError = "Full Name cannot be blank";
+            }
+
+        if (!this.state.email) {
+                emailError = "Email cannot be blank";
+            }
+
+        if (!this.state.phone) {
+                phoneError = "Phone cannot be blank";
+            }
+        
+        if (!this.state.username) {
+          usernameError = "Username cannot be blank";
+        }
+        
+        if (!this.state.password) {
+            passwordError = "Password cannot be blank";
+          }
+        
+        if (fullnameError || emailError || phoneError || usernameError || passwordError) {
+          this.setState({ fullnameError, emailError, phoneError, usernameError, passwordError });
+          return false;
+        }
+    
+        return true;
+      };
+
+    
+    componentWillUpdate(nextProps, nextState) {
+        sessionStorage.setItem('user', JSON.stringify(nextState));
+    }
+
+    onSubmit(event) {
+        const isValid = this.validate();
+        if (isValid) {
+            this.setState({
+                
+                isValid : true
+            })    
+        }
+        event.preventDefault()
+        
     }
     
-    render(){
-        return(
-            <div className="Register">
-                <h1>Register Page</h1>
-                <form onSubmit = {this.handlesubmit} >
-                    <label>Full Name</label>
-                    <input type="text"  name="fullname" 
-                     value= {this.state.fullname} onChange={this.handlechangeall} />
-                    <br/>
+    
 
-                    <label>Email</label>
-                    <input type="email" name="email"
-                     value= {this.state.email} onChange={this.handlechangeall} />
-                    <br/>
+    render() {
+        if (this.state.isValid === true) {
+            return <Redirect to='/' />
+        }
+        return (
+            <div className="container">
+                <form onSubmit={this.onSubmit}>
+                    
+                    <div className="form-group">
+                        <label>Name</label>
+                        <input type="text" className="form-control" 
+                        value={this.state.name} onChange={this.onChangeName} />
 
-                    <label>Contact Number</label>
-                    <input type="number" name="phone" 
-                     value= {this.state.phone} onChange={this.handlechangeall} />
-                    <br/>
+                        <div style={{ fontSize: 12, color: "red" }}>
+                            {this.state.fullnameError}
+                        </div>
+                    </div>
+                    
+                    <div className="form-group">
+                        <label>Email</label>
+                        <input type="email" className="form-control" 
+                        value={this.state.email} onChange={this.onChangeEmail} />
 
-                    <label>Username</label>
-                    <input type="text" name="username"
-                     value= {this.state.username} onChange={this.handlechangeall} />
-                    <br/>
+                        <div style={{ fontSize: 12, color: "red" }}>
+                            {this.state.emailError}
+                        </div>
+                    </div>
+                    
+                    <div className="form-group">
+                        <label>Phone</label>
+                        <input type="tel" className="form-control" 
+                        value={this.state.phone} onChange={this.onChangePhone} />
 
-                    <label>Password</label>
-                    <input type="password" name="password" 
-                     value= {this.state.password} onChange={this.handlechangeall} />
-                    <br/>
+                        <div style={{ fontSize: 12, color: "red" }}>
+                            {this.state.phoneError}
+                        </div>
+                    </div>
 
-                    <input type="submit" value="Register" name="submit"/>
+                    <div className="form-group">
+                        <label>Usename</label>
+                        <input type="text" className="form-control" 
+                        value={this.state.username} onChange={this.onChangeUsername} />
+                        
+                        <div style={{ fontSize: 12, color: "red" }}>
+                        {this.state.usernameError}
+                        </div>
+                    </div>
+
+                    <div className="form-group">
+                        <label>Password</label>
+                        <input type="password" className="form-control" 
+                        value={this.state.password} onChange={this.onChangePassword} />
+
+                        <div style={{ fontSize: 12, color: "red" }}>
+                            {this.state.passwordError}
+                        </div>
+                    </div>
+                    <div className="form-group">
+                        <button type="submit" className="btn btn-primary btn-lg">Submit</button>
+                    </div>
                 </form>
+                <Link to="/"><p>Already a User ? Click here to Login</p></Link>
+                
             </div>
         )
-
     }
-    
 }
-
-export default Register;
