@@ -66,6 +66,7 @@ export default class Login extends Component {
 
     render(){
         if (this.state.toHome === true) {
+            alert("Login successful")
             return <Redirect to='/home' />
         }
         return(
